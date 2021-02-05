@@ -1,0 +1,46 @@
+// Atividade - Potenciais de Ação e modelos tipo HH
+
+
+load_file("nrngui.hoc")     // Arquivo padrão do NEURON contendo gui, menus etc
+
+// --------------------------------------------------------------
+// Configura o axônio da lula
+// --------------------------------------------------------------
+
+
+dt = 0.025                  // Passo de integração numérica
+temperature = 6.3           
+celsius = temperature
+vinit = -63.77              // Potencial de mebrana inicial no soma
+v_init = vinit
+tstop = 50                  // Tempo total de simulação
+
+gna = 0.120 // S/cm2        // Densidade de condutância dos canais de Sódio
+gk = 0.036 // S/cm2         // Densidade de condutância dos canais de Potássio
+
+
+create soma                 // Criando uma seção (pedaço de cabo) chamada "soma"
+
+soma {
+	nseg = 1
+	L = 10               
+    diam = 10/PI            // Comprimento e diâmetro escolhidos para que área superficial seja 100um2
+	ra = 35.4               // Resistência axial específica
+	insert hh               // Insere condutâncias tipo HH na membrana 
+	
+	ion_style("na_ion", 1, 2, 1, 0, 0)
+	ion_style("k_ion", 1, 2, 1, 0, 0)
+}
+
+
+access soma
+
+proc update_values() {      // Reinicia valores com padrões
+	access soma
+	gnabar_hh = gna
+	gkbar_hh = gk
+	celsius = temperature
+}
+
+xopen("atividade_hh.ses")  // Abre arquivo de sessão, contedo especificação da interface gráfica
+
